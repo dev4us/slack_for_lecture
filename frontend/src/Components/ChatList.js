@@ -10,8 +10,6 @@ import {
 } from "../queries";
 
 const ChatList = () => {
-  const nickname = faker.name.findName();
-  const thumbnail = faker.image.avatar();
   const inputChat = useRef();
   const scrollRef = useRef();
 
@@ -30,9 +28,9 @@ const ChatList = () => {
 
   const sendChat = useMutation(SEND_MESSAGE, {
     variables: {
-      nickname,
+      nickname: state.nickname,
       contents: message,
-      thumbnail,
+      thumbnail: state.thumbnail,
       innerChannelId: state.selectedChannelId
     },
     update: (proxy, mutationResult) => {
