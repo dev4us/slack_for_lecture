@@ -1,14 +1,19 @@
-import React, { useContext, useState, useRef } from "react";
-import { useQuery, useMutation } from "react-apollo-hooks";
+import React, { useContext, useState, useRef, useEffect } from "react";
+import { useQuery, useMutation, useSubscription } from "react-apollo-hooks";
 import { Store } from "../GlobalState/store";
 import styled from "styled-components";
 import faker from "faker";
-import { GET_MESSAGES_QUERY, SEND_MESSAGE } from "../queries";
+import {
+  GET_MESSAGES_QUERY,
+  SEND_MESSAGE,
+  MESSAGE_SUBSCRIPTION
+} from "../queries";
 
 const ChatList = () => {
   const nickname = faker.name.findName();
   const thumbnail = faker.image.avatar();
   const inputChat = useRef();
+  const scrollRef = useRef();
 
   const { state } = useContext(Store);
   const [message, handleMessage] = useState("");
@@ -16,7 +21,13 @@ const ChatList = () => {
   const { data } = useQuery(GET_MESSAGES_QUERY, {
     variables: { innerChannelId: state.selectedChannelId }
   });
-  console.log(data);
+
+  useEffect(() => {
+    data.GetMessages &&
+      data.GetMessages.messages &&
+      scrollToBottom(data.GetMessages.messages.length);
+  }, [data]);
+
   const sendChat = useMutation(SEND_MESSAGE, {
     variables: {
       nickname,
@@ -27,6 +38,39 @@ const ChatList = () => {
     update: (proxy, mutationResult) => {
       handleMessage("");
       inputChat.current.focus();
+    }
+  });
+
+  useSubscription(MESSAGE_SUBSCRIPTION, {
+    onSubscriptionData: ({
+      client,
+      subscriptionData: {
+        data: { SendMessageSubscription }
+      }
+    }) => {
+      try {
+        let messages = client.readQuery({
+          query: GET_MESSAGES_QUERY,
+          variables: { innerChannelId: state.selectedChannelId }
+        }).GetMessages.messages;
+
+        if (
+          SendMessageSubscription.innerChannelId === state.selectedChannelId
+        ) {
+          messages.push(SendMessageSubscription);
+
+          client.writeQuery({
+            query: GET_MESSAGES_QUERY,
+            variables: { innerChannelId: state.selectedChannelId },
+            data: {
+              messages
+            }
+          });
+          scrollToBottom(messages.length);
+        }
+      } catch (e) {
+        console.log(e);
+      }
     }
   });
 
@@ -45,9 +89,13 @@ const ChatList = () => {
     return localString[3];
   };
 
+  const scrollToBottom = messageCount => {
+    scrollRef.current.scrollTo(0, messageCount * 80);
+  };
+
   return (
     <MainFrame>
-      <ChatListFrame>
+      <ChatListFrame ref={scrollRef}>
         {data.GetMessages &&
           data.GetMessages.ok &&
           data.GetMessages.messages.map((message, index) => (

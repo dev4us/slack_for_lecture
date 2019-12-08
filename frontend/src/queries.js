@@ -62,3 +62,15 @@ export const SEND_MESSAGE = gql`
     }
   }
 `;
+
+export const MESSAGE_SUBSCRIPTION = gql`
+  subscription SendMessageSubscription {
+    SendMessageSubscription {
+      nickname
+      thumbnail
+      contents
+      createdAt
+      innerChannelId
+    }
+  }
+`;
