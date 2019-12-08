@@ -1,7 +1,11 @@
 import React, { useState, useContext } from "react";
 import styled, { css } from "styled-components";
-import { useQuery, useMutation } from "react-apollo-hooks";
-import { GET_CHANNELS_QUERY, CREATE_CHANNEL } from "../queries";
+import { useQuery, useMutation, useSubscription } from "react-apollo-hooks";
+import {
+  GET_CHANNELS_QUERY,
+  CREATE_CHANNEL,
+  CHANNELS_SUBSCRIPTION
+} from "../queries";
 import { Store } from "../GlobalState/store";
 
 const ChannelList = () => {
@@ -17,9 +21,33 @@ const ChannelList = () => {
     });
   };
 
+  useSubscription(CHANNELS_SUBSCRIPTION, {
+    onSubscriptionData: ({
+      client,
+      subscriptionData: {
+        data: { CreateChannelSubscription }
+      }
+    }) => {
+      let nextChannels = client.readQuery({ query: GET_CHANNELS_QUERY })
+        .GetChannels.channels;
+
+      nextChannels.push(CreateChannelSubscription);
+
+      client.writeQuery({
+        query: GET_CHANNELS_QUERY,
+        data: {
+          channels: nextChannels
+        }
+      });
+    }
+  });
+
   const createChannel = useMutation(CREATE_CHANNEL, {
     variables: {
       channelName
+    },
+    update: (proxy, mutationResult) => {
+      handleChannelName("");
     }
   });
 
