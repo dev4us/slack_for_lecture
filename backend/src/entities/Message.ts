@@ -26,6 +26,9 @@ class Message extends BaseEntity {
   )
   innerChannel: Channel;
 
+  @Column({ type: "text", nullable: false })
+  innerChannelId: number;
+
   @CreateDateColumn()
   createdAt: string;
 
