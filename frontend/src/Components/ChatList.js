@@ -1,15 +1,19 @@
 import React from "react";
 import styled from "styled-components";
+import faker from "faker";
 
 const ChatList = () => {
+  const nickName = faker.name.findName();
+  const thumbnail = faker.image.avatar();
+
   return (
     <MainFrame>
       <ChatListFrame>
         <MessageFrame>
-          <Thumbnail></Thumbnail>
+          <Thumbnail background={thumbnail}></Thumbnail>
           <ContentsFrame>
             <ContentsInFrame>
-              <NickName>dev4us</NickName>
+              <NickName>{nickName}</NickName>
               <DateTime>14:50 PM</DateTime>
             </ContentsInFrame>
             <ContentsInFrame>
@@ -50,7 +54,7 @@ const Thumbnail = styled.div`
   height: 45px;
   background: black;
   padding: 5px 5px 5px 5px;
-  background-image: url("https://stickershop.line-scdn.net/stickershop/v1/product/1050760/LINEStorePC/main.png;compress=true");
+  background-image: url(${props => props.background});
   background-size: cover;
   margin-top: 10px;
   border-radius: 5px;
