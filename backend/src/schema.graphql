@@ -1,3 +1,24 @@
+type CreateChannelResponse {
+  ok: Boolean!
+  error: String
+}
+
+type Mutation {
+  CreateChannel(channelName: String!): CreateChannelResponse!
+  SendMessage(nickname: String!, contents: String!, innerChannelId: Int!): SendMessageResponse!
+}
+
+type GetChannelsResponse {
+  ok: Boolean!
+  error: String
+  channels: [Channel]
+}
+
+type Query {
+  GetChannels: GetChannelsResponse!
+  GetMessages(innerChannelId: Int!): GetMessagesResponse!
+}
+
 type Channel {
   id: Int!
   channelName: String!
@@ -12,17 +33,13 @@ type GetMessagesResponse {
   messages: [Message]
 }
 
-type Query {
-  GetMessages(innerChannelId: Int!): GetMessagesResponse!
-}
-
 type SendMessageResponse {
   ok: Boolean!
   error: String
 }
 
-type Mutation {
-  SendMessage(nickname: String!, contents: String!, innerChannelId: Int!): SendMessageResponse!
+type Subscription {
+  SendMessageSubscription: Message
 }
 
 type Message {
