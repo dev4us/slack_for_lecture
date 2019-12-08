@@ -1,19 +1,40 @@
-import React, { useContext } from "react";
-import { useQuery } from "react-apollo-hooks";
+import React, { useContext, useState, useRef } from "react";
+import { useQuery, useMutation } from "react-apollo-hooks";
 import { Store } from "../GlobalState/store";
 import styled from "styled-components";
 import faker from "faker";
-import { GET_MESSAGES_QUERY } from "../queries";
+import { GET_MESSAGES_QUERY, SEND_MESSAGE } from "../queries";
 
 const ChatList = () => {
-  const nickName = faker.name.findName();
+  const nickname = faker.name.findName();
   const thumbnail = faker.image.avatar();
+  const inputChat = useRef();
 
   const { state } = useContext(Store);
+  const [message, handleMessage] = useState("");
 
   const { data } = useQuery(GET_MESSAGES_QUERY, {
     variables: { innerChannelId: state.selectedChannelId }
   });
+  console.log(data);
+  const sendChat = useMutation(SEND_MESSAGE, {
+    variables: {
+      nickname,
+      contents: message,
+      thumbnail,
+      innerChannelId: state.selectedChannelId
+    },
+    update: (proxy, mutationResult) => {
+      handleMessage("");
+      inputChat.current.focus();
+    }
+  });
+
+  const setMessageByKey = e => {
+    if (e.key === "Enter") {
+      sendChat();
+    }
+  };
 
   const TimeConverter = timestamp => {
     if (!timestamp) {
@@ -45,7 +66,14 @@ const ChatList = () => {
           ))}
       </ChatListFrame>
       <ChatFrame>
-        <ChatInput type="text" placholder="input your message 😊"></ChatInput>
+        <ChatInput
+          type="text"
+          ref={inputChat}
+          value={message}
+          onChange={e => handleMessage(e.target.value)}
+          onKeyPress={e => setMessageByKey(e)}
+          placholder="input your message 😊"
+        ></ChatInput>
       </ChatFrame>
     </MainFrame>
   );

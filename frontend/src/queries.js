@@ -36,9 +36,29 @@ export const GET_MESSAGES_QUERY = gql`
       ok
       messages {
         nickname
+        thumbnail
         contents
         createdAt
       }
+    }
+  }
+`;
+
+export const SEND_MESSAGE = gql`
+  mutation sendMessage(
+    $nickname: String!
+    $thumbnail: String!
+    $contents: String!
+    $innerChannelId: Int!
+  ) {
+    SendMessage(
+      nickname: $nickname
+      thumbnail: $thumbnail
+      contents: $contents
+      innerChannelId: $innerChannelId
+    ) {
+      ok
+      error
     }
   }
 `;
