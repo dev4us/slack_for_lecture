@@ -47,7 +47,11 @@ const ChannelList = () => {
       channelName
     },
     update: (proxy, mutationResult) => {
-      handleChannelName("");
+      if (mutationResult.data.CreateChannel.ok) {
+        handleChannelName("");
+      } else {
+        alert(mutationResult.data.CreateChannel.error);
+      }
     }
   });
 
