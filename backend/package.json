@@ -4,7 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "cd src && nodemon --exec ts-node index.ts -e ts,graphql"
+    "predev": "yarn run types",
+    "dev": "cd src && nodemon --exec ts-node index.ts -e ts,graphql",
+    "pretypes": "gql-merge --out-file ./src/schema.graphql ./src/api/**/*.graphql",
+    "types": "graphql-to-typescript ./src/schema.graphql ./src/types/graphql.d.ts"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
