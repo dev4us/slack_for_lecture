@@ -1,12 +1,13 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import styled, { css } from "styled-components";
-import { useQuery } from "react-apollo-hooks";
-import { GET_CHANNELS_QUERY } from "../queries";
+import { useQuery, useMutation } from "react-apollo-hooks";
+import { GET_CHANNELS_QUERY, CREATE_CHANNEL } from "../queries";
 import { Store } from "../GlobalState/store";
 
 const ChannelList = () => {
   const { state, dispatch } = useContext(Store);
   const { data, loading } = useQuery(GET_CHANNELS_QUERY);
+  const [channelName, handleChannelName] = useState("");
 
   const switchChannel = id => {
     dispatch({
@@ -15,6 +16,12 @@ const ChannelList = () => {
       payload: id
     });
   };
+
+  const createChannel = useMutation(CREATE_CHANNEL, {
+    variables: {
+      channelName
+    }
+  });
 
   return (
     <MainFrame>
@@ -33,8 +40,12 @@ const ChannelList = () => {
           </Channel>
         ))}
       <CreateChannelFrame>
-        <CreateChannelInput placeholder="input new channel" />
-        <CreateChannelBtn>+</CreateChannelBtn>
+        <CreateChannelInput
+          placeholder="input new channel"
+          value={channelName}
+          onChange={e => handleChannelName(e.target.value)}
+        />
+        <CreateChannelBtn onClick={createChannel}>+</CreateChannelBtn>
       </CreateChannelFrame>
     </MainFrame>
   );
