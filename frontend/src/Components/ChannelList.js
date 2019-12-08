@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled, { css } from "styled-components";
 import { useQuery } from "react-apollo-hooks";
 import { GET_CHANNELS_QUERY } from "../queries";
+import { Store } from "../GlobalState/store";
 
 const ChannelList = () => {
+  const { state, dispatch } = useContext(Store);
   const { data, loading } = useQuery(GET_CHANNELS_QUERY);
-  console.log(data);
+
+  const switchChannel = id => {
+    dispatch({
+      type: "SET_VALUE",
+      target: "selectedChannelId",
+      payload: id
+    });
+  };
+
   return (
     <MainFrame>
       <Title>Slack with GraphQL</Title>
@@ -13,8 +23,14 @@ const ChannelList = () => {
       {loading && <Channel>Now Loading...</Channel>}
       {data.GetChannels &&
         data.GetChannels.ok &&
-        data.GetChannels.channels.map((channels, index) => (
-          <Channel key={index}># {channels.channelName}</Channel>
+        data.GetChannels.channels.map((channel, index) => (
+          <Channel
+            key={index}
+            isActive={state.selectedChannelId === channel.id}
+            onClick={() => switchChannel(channel.id)}
+          >
+            # {channel.channelName}
+          </Channel>
         ))}
       <CreateChannelFrame>
         <CreateChannelInput placeholder="input new channel" />
