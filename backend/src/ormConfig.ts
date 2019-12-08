@@ -1,7 +1,7 @@
 import { createConnection, Connection } from "typeorm";
 import { ConnectionOptions } from "typeorm";
 
-const dotenv = require("dotenv");
+import dotenv from "dotenv";
 dotenv.config();
 
 const connectionOptions: ConnectionOptions = {
