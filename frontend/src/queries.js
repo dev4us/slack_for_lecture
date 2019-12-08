@@ -29,3 +29,16 @@ export const CHANNELS_SUBSCRIPTION = gql`
     }
   }
 `;
+
+export const GET_MESSAGES_QUERY = gql`
+  query getMessages($innerChannelId: Int!) {
+    GetMessages(innerChannelId: $innerChannelId) {
+      ok
+      messages {
+        nickname
+        contents
+        createdAt
+      }
+    }
+  }
+`;

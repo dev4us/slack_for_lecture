@@ -1,26 +1,48 @@
-import React from "react";
+import React, { useContext } from "react";
+import { useQuery } from "react-apollo-hooks";
+import { Store } from "../GlobalState/store";
 import styled from "styled-components";
 import faker from "faker";
+import { GET_MESSAGES_QUERY } from "../queries";
 
 const ChatList = () => {
   const nickName = faker.name.findName();
   const thumbnail = faker.image.avatar();
 
+  const { state } = useContext(Store);
+
+  const { data } = useQuery(GET_MESSAGES_QUERY, {
+    variables: { innerChannelId: state.selectedChannelId }
+  });
+
+  const TimeConverter = timestamp => {
+    if (!timestamp) {
+      return;
+    }
+    let timestamp_date = new Date(parseInt(timestamp));
+    const localString = timestamp_date.toLocaleString().split(".");
+    return localString[3];
+  };
+
   return (
     <MainFrame>
       <ChatListFrame>
-        <MessageFrame>
-          <Thumbnail background={thumbnail}></Thumbnail>
-          <ContentsFrame>
-            <ContentsInFrame>
-              <NickName>{nickName}</NickName>
-              <DateTime>14:50 PM</DateTime>
-            </ContentsInFrame>
-            <ContentsInFrame>
-              <Contents>안녕?</Contents>
-            </ContentsInFrame>
-          </ContentsFrame>
-        </MessageFrame>
+        {data.GetMessages &&
+          data.GetMessages.ok &&
+          data.GetMessages.messages.map((message, index) => (
+            <MessageFrame key={index}>
+              <Thumbnail background={thumbnail}></Thumbnail>
+              <ContentsFrame>
+                <ContentsInFrame>
+                  <NickName>{message.nickname}</NickName>
+                  <DateTime>{TimeConverter(message.createdAt)}</DateTime>
+                </ContentsInFrame>
+                <ContentsInFrame>
+                  <Contents>{message.contents}</Contents>
+                </ContentsInFrame>
+              </ContentsFrame>
+            </MessageFrame>
+          ))}
       </ChatListFrame>
       <ChatFrame>
         <ChatInput type="text" placholder="input your message 😊"></ChatInput>
