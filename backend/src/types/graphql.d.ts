@@ -1,17 +1,15 @@
-export const typeDefs = [
-  "type Channel {\n  id: Int!\n  channelName: String!\n  messages: [Message]\n  createdAt: String!\n  updatedAt: String\n}\n\ntype GetMessageResponse {\n  ok: Boolean!\n  error: String\n  messages: [Message]\n}\n\ntype Query {\n  GetMessage(innerChannelId: Int!): GetMessageResponse!\n}\n\ntype Message {\n  id: Int!\n  nickname: String!\n  contents: String!\n  innerChannel: Channel!\n  innerChannelId: Int!\n  createdAt: String!\n  updatedAt: String\n}\n"
-];
+export const typeDefs = ["type Channel {\n  id: Int!\n  channelName: String!\n  messages: [Message]\n  createdAt: String!\n  updatedAt: String\n}\n\ntype GetMessagesResponse {\n  ok: Boolean!\n  error: String\n  messages: [Message]\n}\n\ntype Query {\n  GetMessages(innerChannelId: Int!): GetMessagesResponse!\n}\n\ntype SendMessageResponse {\n  ok: Boolean!\n  error: String\n}\n\ntype Mutation {\n  SendMessage(nickname: String!, contents: String!, innerChannelId: Int!): SendMessageResponse!\n}\n\ntype Message {\n  id: Int!\n  nickname: String!\n  contents: String!\n  innerChannel: Channel!\n  innerChannelId: Int!\n  createdAt: String!\n  updatedAt: String\n}\n"];
 /* tslint:disable */
 
 export interface Query {
-  GetMessage: GetMessageResponse;
+  GetMessages: GetMessagesResponse;
 }
 
-export interface GetMessageQueryArgs {
+export interface GetMessagesQueryArgs {
   innerChannelId: number;
 }
 
-export interface GetMessageResponse {
+export interface GetMessagesResponse {
   ok: boolean;
   error: string | null;
   messages: Array<Message> | null;
@@ -33,4 +31,19 @@ export interface Channel {
   messages: Array<Message> | null;
   createdAt: string;
   updatedAt: string | null;
+}
+
+export interface Mutation {
+  SendMessage: SendMessageResponse;
+}
+
+export interface SendMessageMutationArgs {
+  nickname: string;
+  contents: string;
+  innerChannelId: number;
+}
+
+export interface SendMessageResponse {
+  ok: boolean;
+  error: string | null;
 }

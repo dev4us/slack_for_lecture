@@ -1,19 +1,9 @@
 import { GraphQLServer } from "graphql-yoga";
+
 import connection from "./ormConfig";
+import schema from "./schema";
 
-const typeDefs = `
-  type Query{
-    hello: String!
-  }
-`;
-
-const resolvers = {
-  Query: {
-    hello: () => "Hi there : )"
-  }
-};
-
-const server = new GraphQLServer({ typeDefs, resolvers });
+const server = new GraphQLServer({ schema });
 
 connection.then(() =>
   server.start(() => console.log("Server is running on localhost:4000"))

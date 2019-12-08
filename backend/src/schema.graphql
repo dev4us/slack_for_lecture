@@ -6,14 +6,23 @@ type Channel {
   updatedAt: String
 }
 
-type GetMessageResponse {
+type GetMessagesResponse {
   ok: Boolean!
   error: String
   messages: [Message]
 }
 
 type Query {
-  GetMessage(innerChannelId: Int!): GetMessageResponse!
+  GetMessages(innerChannelId: Int!): GetMessagesResponse!
+}
+
+type SendMessageResponse {
+  ok: Boolean!
+  error: String
+}
+
+type Mutation {
+  SendMessage(nickname: String!, contents: String!, innerChannelId: Int!): SendMessageResponse!
 }
 
 type Message {

@@ -1,13 +1,13 @@
-import { Resolvers } from "../../../../src/types/resolvers";
-import { GetMessageQueryArgs, GetMessageResponse } from "src/types/graphql";
-import Message from "src/entities/Message";
+import { Resolvers } from "../../../types/resolvers";
+import { GetMessagesQueryArgs, GetMessagesResponse } from "src/types/graphql";
+import Message from "../../../entities/Message";
 
 const resolvers: Resolvers = {
   Query: {
     GetMessages: async (
       _,
-      args: GetMessageQueryArgs
-    ): Promise<GetMessageResponse> => {
+      args: GetMessagesQueryArgs
+    ): Promise<GetMessagesResponse> => {
       try {
         const { innerChannelId } = args;
 
