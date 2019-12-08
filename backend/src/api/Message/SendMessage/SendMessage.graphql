@@ -6,6 +6,7 @@ type SendMessageResponse {
 type Mutation {
   SendMessage(
     nickname: String!
+    thumbnail: String!
     contents: String!
     innerChannelId: Int!
   ): SendMessageResponse!

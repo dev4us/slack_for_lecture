@@ -5,7 +5,7 @@ type CreateChannelResponse {
 
 type Mutation {
   CreateChannel(channelName: String!): CreateChannelResponse!
-  SendMessage(nickname: String!, contents: String!, innerChannelId: Int!): SendMessageResponse!
+  SendMessage(nickname: String!, thumbnail: String!, contents: String!, innerChannelId: Int!): SendMessageResponse!
 }
 
 type Subscription {
@@ -46,6 +46,7 @@ type SendMessageResponse {
 type Message {
   id: Int!
   nickname: String!
+  thumbnail: String!
   contents: String!
   innerChannel: Channel!
   innerChannelId: Int!

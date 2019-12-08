@@ -15,6 +15,9 @@ class Message extends BaseEntity {
   id: number;
 
   @Column({ type: "text", nullable: false })
+  thumbnail: string;
+
+  @Column({ type: "text", nullable: false })
   nickname: string;
 
   @Column({ type: "text", nullable: false })

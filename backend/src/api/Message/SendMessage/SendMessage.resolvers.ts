@@ -14,7 +14,7 @@ const resolvers: Resolvers = {
       { pubSub }
     ): Promise<SendMessageResponse> => {
       try {
-        const { nickname, contents, innerChannelId } = args;
+        const { nickname, thumbnail, contents, innerChannelId } = args;
 
         const channel = await Channel.findOne({ id: innerChannelId });
 
@@ -27,6 +27,7 @@ const resolvers: Resolvers = {
 
         const newMessage = await Message.create({
           nickname,
+          thumbnail,
           contents,
           innerChannel: channel,
           innerChannelId: channel.id

@@ -31,7 +31,7 @@ const ChatList = () => {
           data.GetMessages.ok &&
           data.GetMessages.messages.map((message, index) => (
             <MessageFrame key={index}>
-              <Thumbnail background={thumbnail}></Thumbnail>
+              <Thumbnail background={message.thumbnail}></Thumbnail>
               <ContentsFrame>
                 <ContentsInFrame>
                   <NickName>{message.nickname}</NickName>
