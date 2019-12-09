@@ -1,11 +1,11 @@
 # Welcome to Slack Clone project (with GraphQL)!
 
-_사내 강연 시 사용할 슬랙 클론 프로젝트 입니다 : )_
+_사내 스터디 진행 시 사용할 슬랙 클론 프로젝트 입니다 : )_
 
 ## What We are building?
 ![](https://github.com/dev4us/source_warehouse/blob/master/images/KakaoTalk_20191208_190545041.png?raw=true)
 
-이번 강연은 GraphQL을 통한 'Slack (https://slack.com/)' 클론 프로젝트를 준비했습니다.
+GraphQL을 통한 'Slack (https://slack.com/)' 클론 프로젝트를 준비했습니다.
 
 GraphQL과 React를 주 언어로 활용하여 백엔드, DB, 프론트엔드의 모든 개발 과정(full-stack, like a boss😎)을 백지부터 시작하여 완성해나가는 과정을 함께 진행하실 수 있으며 최신 스택에 대한 개발 방법 및 노하우 또한 얻을 수 있습니다.
 
